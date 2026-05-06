@@ -67,3 +67,12 @@ if __name__ == '__main__':
         start_lock_cleanup(app)
         start_email_worker()
     app.run(debug=True, port=5000)
+
+
+from flask import Flask, jsonify
+
+app = Flask(__name__)
+
+@app.route("/")
+def home():
+    return jsonify({"message": "Backend working"})
