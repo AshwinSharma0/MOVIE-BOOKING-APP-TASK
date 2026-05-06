@@ -114,6 +114,7 @@ def seat_status():
     try:
         release_expired_locks()
 
+        movie = Movie.query.get_or_404(movie_id)
         seat = Seat.query.filter_by(id=seat_id, movie_id=movie_id).first_or_404()
         seat_type, price = get_seat_type_and_price(seat.row, movie.price)
         status = get_seat_status(seat)
