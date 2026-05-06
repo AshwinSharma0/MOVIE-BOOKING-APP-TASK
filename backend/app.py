@@ -29,12 +29,12 @@ with app.app_context():
         except Exception as e:
             print(f"Note: Database seeding attempted: {e}")
 
-# Register blueprints
-app.register_blueprint(movies_bp)
-app.register_blueprint(seats_bp)
-app.register_blueprint(book_bp)
-app.register_blueprint(admin_bp, url_prefix='/admin')
-app.register_blueprint(payments_bp, url_prefix='/payment')
+# Register blueprints with /api prefix for Vercel
+app.register_blueprint(movies_bp, url_prefix='/api')
+app.register_blueprint(seats_bp, url_prefix='/api')
+app.register_blueprint(book_bp, url_prefix='/api')
+app.register_blueprint(admin_bp, url_prefix='/api/admin')
+app.register_blueprint(payments_bp, url_prefix='/api/payment')
 
 
 def start_lock_cleanup(application):
