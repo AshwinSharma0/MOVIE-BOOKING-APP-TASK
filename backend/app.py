@@ -5,7 +5,7 @@ import time
 from flask import Flask
 from flask_cors import CORS
 from database import init_db
-from models import release_expired_locks
+from models import release_expired_locks, Movie, db
 from routes.movies import movies_bp
 from routes.seats import seats_bp
 from routes.book import book_bp
@@ -14,10 +14,20 @@ from payments import payments_bp
 from email_queue import start_email_worker
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/api/*": {"origins": "*"}})
 
 # Initialize database
 init_db(app)
+
+# Auto-seed database if empty (for Vercel deployment)
+with app.app_context():
+    if Movie.query.count() == 0:
+        try:
+            from seed import seed_movies, seed_seats
+            seed_movies()
+            seed_seats()
+        except Exception as e:
+            print(f"Note: Database seeding attempted: {e}")
 
 # Register blueprints
 app.register_blueprint(movies_bp)
